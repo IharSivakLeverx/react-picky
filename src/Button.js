@@ -6,17 +6,16 @@ function Button({ id, disabled, onClick, children, className, ...rest }) {
   const classes = [
     'picky__input',
     disabled ? 'picky__input--disabled' : '',
-    className
+    className,
   ].join(' ');
 
   return (
     <button
       id={buttonId}
-      type="button"
+      type='button'
       className={classes}
       onClick={onClick}
-      data-testid="picky-input"
-      disabled={disabled}
+      data-testid='picky-input'
       {...rest}
     >
       {children}
@@ -32,7 +31,7 @@ Button.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  className:PropTypes.string
+  className: PropTypes.string,
 };
 Button.displayName = 'Button';
 export default onlyUpdateForKeys(['disabled', 'children'])(Button);

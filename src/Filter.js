@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import IconButton from 'application/Modules/Common/Components/NewButton/IconButton';
 class Filter extends Component {
   shouldComponentUpdate(nextProps) {
     return (
@@ -9,15 +10,23 @@ class Filter extends Component {
   }
   render() {
     return (
-      <div className="picky__filter">
+      <div className='picky__filter'>
+        <IconButton
+          name='search'
+          size='medium'
+          variant='default'
+          style={{
+            color: '#818BA3',
+          }}
+        />
         <input
-          type="text"
+          type='text'
           ref={input => (this.filterInput = input)}
-          className="picky__filter__input"
-          data-testid="picky__filter__input"
+          className='picky__filter__input'
+          data-testid='picky__filter__input'
           placeholder={this.props.placeholder}
           tabIndex={this.props.tabIndex}
-          aria-label="filter options"
+          aria-label='filter options'
           onChange={e => this.props.onFilterChange(e.target.value)}
         />
       </div>

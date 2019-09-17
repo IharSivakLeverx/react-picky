@@ -24,9 +24,9 @@ const Option = props => {
     <div
       tabIndex={tabIndex}
       id={id}
-      role="option"
+      role='option'
       style={style}
-      data-testid="option"
+      data-testid='option'
       data-selected={isSelected ? 'selected' : ''}
       aria-selected={isSelected}
       className={cssClass}

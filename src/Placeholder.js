@@ -11,16 +11,16 @@ const isEmptyValue = value =>
   (Array.isArray(value) && !value.length);
 
 const Placeholder = ({
-  placeholder,
-  value,
-  numberDisplayed,
-  multiple,
-  valueKey,
-  labelKey,
-  manySelectedPlaceholder,
-  allSelectedPlaceholder,
-  allSelected,
-}) => {
+                       placeholder,
+                       value,
+                       numberDisplayed,
+                       multiple,
+                       valueKey,
+                       labelKey,
+                       manySelectedPlaceholder,
+                       allSelectedPlaceholder,
+                       allSelected,
+                     }) => {
   let message = '';
   if (isEmptyValue(value)) {
     message = placeholder;
@@ -63,9 +63,9 @@ const Placeholder = ({
   }
 
   return (
-    <span className="picky__placeholder" data-testid="picky_placeholder">
-      {message}
-    </span>
+    <span className='picky__placeholder' data-testid='picky_placeholder'>
+			{message}
+		</span>
   );
 };
 

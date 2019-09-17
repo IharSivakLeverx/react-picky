@@ -13,8 +13,7 @@ import {
 import Placeholder from './Placeholder';
 import Filter from './Filter';
 import Option from './Option';
-import './Picky.css';
-import SelectAll from './SelectAll';
+import FilterSelect from './FilterSelect';
 import Button from './Button';
 
 class Picky extends React.PureComponent {
@@ -26,6 +25,8 @@ class Picky extends React.PureComponent {
       filtered: false,
       filteredOptions: [],
       allSelected: false,
+      isCompetitors: false,
+      isInHouse: false,
     };
     this.toggleDropDown = this.toggleDropDown.bind(this);
     this.toggleSelectAll = this.toggleSelectAll.bind(this);
@@ -36,6 +37,8 @@ class Picky extends React.PureComponent {
     this.isItemSelected = this.isItemSelected.bind(this);
     this.focusFilterInput = this.focusFilterInput.bind(this);
     this.getValue = this.getValue.bind(this);
+    this.filterOnInHouse = this.filterOnInHouse.bind(this);
+    this.filterOnCompetitors = this.filterOnCompetitors.bind(this);
   }
   UNSAFE_componentWillMount() {
     this.setState({
@@ -70,14 +73,15 @@ class Picky extends React.PureComponent {
     }
   }
 
-  selectValue(val) {
+  selectValue(val, e) {
+    if (e.target.type === 'checkbox') return;
     const valueLookup = this.props.value;
     if (this.props.multiple && Array.isArray(valueLookup)) {
       const itemIndex = hasItemIndex(
         valueLookup,
         val,
         this.props.valueKey,
-        this.props.labelKey
+        this.props.labelKey,
       );
 
       let selectedValue = [];
@@ -94,8 +98,8 @@ class Picky extends React.PureComponent {
           allSelected: this.allSelected(selectedValue),
         },
         () => {
-          this.props.onChange(selectedValue);
-        }
+          this.props.onChange(selectedValue, val);
+        },
       );
     } else {
       this.props.onChange(val);
@@ -135,7 +139,7 @@ class Picky extends React.PureComponent {
 
     return arraysEqual(
       sortCollection(copiedValues),
-      sortCollection(copiedOptions)
+      sortCollection(copiedOptions),
     );
   }
   /**
@@ -143,13 +147,15 @@ class Picky extends React.PureComponent {
    *
    * @memberof Picky
    */
-  toggleSelectAll() {
-    if (this.props.disabled) return;
+  toggleSelectAll(e) {
+    if (this.props.disabled || e.target.type === 'checkbox') return;
     this.setState(
       state => {
         return {
           ...state,
           allSelected: !this.state.allSelected,
+          isInHouse: false,
+          isCompetitors: false,
         };
       },
       () => {
@@ -158,18 +164,40 @@ class Picky extends React.PureComponent {
         } else {
           this.props.onChange(this.props.options);
         }
-      }
+      },
     );
   }
 
   isItemSelected(item) {
-    return hasItem(
-      this.props.value,
-      item,
-      this.props.valueKey,
-      this.props.labelKey
-    );
+    if (
+      Array.isArray(item.key) &&
+      this.props.value &&
+      this.props.value.length
+    ) {
+      return !!this.props.value.find(i => i.value == item.value);
+    } else {
+      return hasItem(
+        this.props.value,
+        item,
+        this.props.valueKey,
+        this.props.labelKey,
+      );
+    }
   }
+
+  // isItemSelected(item) {
+  // 	let isSelected = hasItem(
+  // 		this.props.value,
+  // 		item,
+  // 		this.props.valueKey,
+  // 		this.props.labelKey
+  // 	);
+  // 	let isSelecetedActive
+  // 	if(Array.isArray(item.key)) isSelecetedActive = this.props.activeValues.indexOf(item.key[0] + '')
+  // 	else isSelecetedActive = this.props.activeValues.indexOf(item.key + '');
+  // 	isSelecetedActive = isSelecetedActive === -1 ? false : true
+  //   return isSelected || isSelecetedActive
+  // }
 
   renderOptions() {
     const items = this.state.filtered
@@ -255,14 +283,14 @@ class Picky extends React.PureComponent {
     const isObject = isDataObject(
       this.props.options && this.props.options[0],
       this.props.valueKey,
-      this.props.labelKey
+      this.props.labelKey,
     );
     const filteredOptions = this.props.options.filter(option => {
       if (isObject) {
         return includes(
           option[this.props.labelKey],
           term,
-          this.props.caseSensitiveFilter
+          this.props.caseSensitiveFilter,
         );
       }
       return includes(option, term, this.props.caseSensitiveFilter);
@@ -276,7 +304,7 @@ class Picky extends React.PureComponent {
         if (this.props.onFiltered) {
           this.props.onFiltered(filteredOptions);
         }
-      }
+      },
     );
   }
   /**
@@ -342,7 +370,7 @@ class Picky extends React.PureComponent {
         } else if (!isOpen && this.props.onClose) {
           this.props.onClose();
         }
-      }
+      },
     );
   }
 
@@ -359,6 +387,59 @@ class Picky extends React.PureComponent {
       !renderSelectAll && includeSelectAll && multiple && !this.state.filtered
     );
   }
+
+  filterOnInHouse() {
+    if (!this.state.isInHouse) {
+      this.setState(
+        {
+          value: this.props.options.filter(item => item.group === 'In-house'),
+          isInHouse: true,
+          isCompetitors: false,
+        },
+        () => {
+          this.props.onChange(this.state.value);
+        },
+      );
+    } else {
+      this.setState(
+        {
+          isInHouse: false,
+          value: [],
+        },
+        () => {
+          this.props.onChange(this.state.value);
+        },
+      );
+    }
+  }
+
+  filterOnCompetitors() {
+    if (!this.state.isCompetitors) {
+      this.setState(
+        {
+          value: this.props.options.filter(
+            item => item.group === 'Competitors',
+          ),
+          isCompetitors: true,
+          isInHouse: false,
+        },
+        () => {
+          this.props.onChange(this.state.value);
+        },
+      );
+    } else {
+      this.setState(
+        {
+          isCompetitors: false,
+          value: [],
+        },
+        () => {
+          this.props.onChange(this.state.value);
+        },
+      );
+    }
+  }
+
   render() {
     const {
       className,
@@ -390,17 +471,18 @@ class Picky extends React.PureComponent {
         }}
         className={['picky', className].join(' ')}
         id={this.props.id}
-        role="combobox"
+        role='combobox'
         aria-controls={buttonId}
         aria-expanded={open}
         aria-haspopup={open}
         aria-owns={ariaOwns}
+        data-typeview={this.props.typeView}
         tabIndex={tabIndex}
       >
         <Button
           id={`${this.props.id}__button`}
           disabled={disabled}
-          onClick={this.toggleDropDown}
+          onClick={!disabled && this.toggleDropDown}
           {...buttonProps}
         >
           <Placeholder
@@ -413,11 +495,11 @@ class Picky extends React.PureComponent {
             numberDisplayed={numberDisplayed}
             valueKey={valueKey}
             labelKey={labelKey}
-            data-testid="placeholder-component"
+            data-testid='placeholder-component'
           />
         </Button>
         <div
-          className="picky__dropdown"
+          className='picky__dropdown'
           id={this.props.id + '-list'}
           aria-hidden={!open}
           hidden={!open}
@@ -440,17 +522,43 @@ class Picky extends React.PureComponent {
               disabled,
             })
           ) : (
-            <SelectAll
-              visible={this.showSelectAll}
-              tabIndex={tabIndex}
-              disabled={disabled}
-              allSelected={this.state.allSelected}
-              id={this.props.id}
-              selectAllText={this.props.selectAllText}
-              toggleSelectAll={this.toggleSelectAll}
-            />
+            <div className={this.props.multiple && 'picky__wrapperFilters'}>
+              <FilterSelect
+                visible={this.showSelectAll}
+                tabIndex={tabIndex}
+                // disabled={disabled}
+                allSelected={this.state.allSelected}
+                id={this.props.id}
+                selectAllText={this.props.selectAllText}
+                toggleSelectAll={this.toggleSelectAll}
+              />
+              {this.props.inHouse && (
+                <FilterSelect
+                  // visible={this.showSelectAll}
+                  visible={true}
+                  tabIndex={tabIndex}
+                  // disabled={disabled}
+                  allSelected={this.state.isInHouse}
+                  id={this.props.id}
+                  selectAllText={'In-house'}
+                  toggleSelectAll={this.filterOnInHouse}
+                />
+              )}
+              {this.props.isCompetitors && (
+                <FilterSelect
+                  // visible={this.showSelectAll}
+                  visible={true}
+                  tabIndex={tabIndex}
+                  // disabled={disabled}
+                  allSelected={this.state.isCompetitors}
+                  id={this.props.id}
+                  selectAllText={'Competitors'}
+                  toggleSelectAll={this.filterOnCompetitors}
+                />
+              )}
+            </div>
           )}
-          {open && <div data-testid="dropdown">{this.renderOptions()}</div>}
+          {open && <div data-testid='dropdown'>{this.renderOptions()}</div>}
         </div>
       </div>
     );
