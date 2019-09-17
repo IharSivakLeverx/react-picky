@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconButton from 'application/Modules/Common/Components/NewButton/IconButton';
+import IconButton from './IconButton';
 class Filter extends Component {
   shouldComponentUpdate(nextProps) {
     return (
