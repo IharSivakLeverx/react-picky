@@ -42,7 +42,7 @@ class Picky extends React.PureComponent {
   }
   UNSAFE_componentWillMount() {
     this.setState({
-      allSelected: true,
+      allSelected: this.allSelected(),
     });
   }
 
