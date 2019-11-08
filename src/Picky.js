@@ -133,15 +133,16 @@ class Picky extends React.PureComponent {
     if (selectedOptions && selectedOptions.length === 0) {
       return false;
     }
-    let copiedOptions = selectedOptions.map(this.getValue);
-    let copiedValues = Array.isArray(selectedValue)
-      ? selectedValue.map(this.getValue)
-      : [];
+    if(selectedValue && selectedValue.length === 0) return true
+    // let copiedOptions = selectedOptions.map(this.getValue);
+    // let copiedValues = Array.isArray(selectedValue)
+    //   ? selectedValue.map(this.getValue)
+    //   : [];
 
-    return arraysEqual(
-      sortCollection(copiedValues),
-      sortCollection(copiedOptions),
-    );
+    // return arraysEqual(
+    //   sortCollection(copiedValues),
+    //   sortCollection(copiedOptions),
+    // );
   }
   /**
    * Toggles select all
