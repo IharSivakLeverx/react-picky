@@ -42,7 +42,7 @@ class Picky extends React.PureComponent {
   }
   UNSAFE_componentWillMount() {
     this.setState({
-      allSelected: this.allSelected(),
+      allSelected: true,
     });
   }
 
@@ -124,7 +124,6 @@ class Picky extends React.PureComponent {
    * @memberof Picky
    */
   allSelected(overrideSelected, overrideOptions) {
-    console.log(overrideSelected, overrideOptions)
     const { value, options } = this.props;
     const selectedValue = overrideSelected || value;
     const selectedOptions = overrideOptions || options;
