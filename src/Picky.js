@@ -124,8 +124,6 @@ class Picky extends React.PureComponent {
    * @memberof Picky
    */
   allSelected(overrideSelected, overrideOptions) {
-    console.log(overrideSelected)
-    console.log(this.props.value)
     const { value, options } = this.props;
     const selectedValue = overrideSelected || value;
     const selectedOptions = overrideOptions || options;
