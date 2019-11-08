@@ -134,7 +134,10 @@ class Picky extends React.PureComponent {
     if (selectedOptions && selectedOptions.length === 0) {
       return false;
     }
-    if(selectedValue && selectedValue.length === 0) return true
+    if(selectedValue && selectedValue.length === 0 && this.props.includeSelectAll){
+      this.props.onChange(this.props.options)
+      return true
+    }
     // let copiedOptions = selectedOptions.map(this.getValue);
     // let copiedValues = Array.isArray(selectedValue)
     //   ? selectedValue.map(this.getValue)
