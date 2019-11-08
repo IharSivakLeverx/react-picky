@@ -172,7 +172,8 @@ class Picky extends React.PureComponent {
   }
 
   isItemSelected(item) {
-    if (
+    if(this.state.allSelected) return this.state.allSelected
+    else if (
       Array.isArray(item.key) &&
       this.props.value &&
       this.props.value.length
@@ -444,6 +445,7 @@ class Picky extends React.PureComponent {
   }
 
   render() {
+    console.log(this.state)
     const {
       className,
       placeholder,
