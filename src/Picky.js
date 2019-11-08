@@ -24,7 +24,7 @@ class Picky extends React.PureComponent {
       open: props.open,
       filtered: false,
       filteredOptions: [],
-      allSelected: true,
+      allSelected: false,
       isCompetitors: false,
       isInHouse: false,
     };
@@ -132,19 +132,15 @@ class Picky extends React.PureComponent {
     if (selectedOptions && selectedOptions.length === 0) {
       return false;
     }
-    if(selectedValue && selectedValue.length === 0 && this.props.includeSelectAll){
-      this.props.onChange(this.props.options)
-      return true
-    }
-    // let copiedOptions = selectedOptions.map(this.getValue);
-    // let copiedValues = Array.isArray(selectedValue)
-    //   ? selectedValue.map(this.getValue)
-    //   : [];
+    let copiedOptions = selectedOptions.map(this.getValue);
+    let copiedValues = Array.isArray(selectedValue)
+      ? selectedValue.map(this.getValue)
+      : [];
 
-    // return arraysEqual(
-    //   sortCollection(copiedValues),
-    //   sortCollection(copiedOptions),
-    // );
+    return arraysEqual(
+      sortCollection(copiedValues),
+      sortCollection(copiedOptions),
+    );
   }
   /**
    * Toggles select all
@@ -173,8 +169,7 @@ class Picky extends React.PureComponent {
   }
 
   isItemSelected(item) {
-    if(this.state.allSelected) return this.state.allSelected
-    else if (
+    if (
       Array.isArray(item.key) &&
       this.props.value &&
       this.props.value.length
@@ -446,7 +441,6 @@ class Picky extends React.PureComponent {
   }
 
   render() {
-    console.log(this.state)
     const {
       className,
       placeholder,
