@@ -25,8 +25,6 @@ class Picky extends React.PureComponent {
       filtered: false,
       filteredOptions: [],
       allSelected: false,
-      isCompetitors: false,
-      isInHouse: false,
       groupsFilteringData: null
     }
     this.toggleDropDown = this.toggleDropDown.bind(this);
@@ -38,8 +36,6 @@ class Picky extends React.PureComponent {
     this.isItemSelected = this.isItemSelected.bind(this);
     this.focusFilterInput = this.focusFilterInput.bind(this);
     this.getValue = this.getValue.bind(this);
-    this.filterOnInHouse = this.filterOnInHouse.bind(this);
-    this.filterOnCompetitors = this.filterOnCompetitors.bind(this);
     this.filterOnGroup = this.filterOnGroup.bind(this);
   }
   UNSAFE_componentWillMount() {
@@ -73,6 +69,7 @@ class Picky extends React.PureComponent {
       });
     }
     if(nextProps.updateData){
+      console.log(nextProps)
       let groupsFilteringData = {}
       nextProps.options.forEach(i => {
         if(!!i.group){
@@ -433,31 +430,6 @@ class Picky extends React.PureComponent {
     );
   }
 
-  filterOnInHouse() {
-    if (!this.state.isInHouse) {
-      this.setState(
-        {
-          value: this.props.options.filter(item => item.group === 'In-house'),
-          isInHouse: true,
-          isCompetitors: false,
-        },
-        () => {
-          this.props.onChange(this.state.value);
-        },
-      );
-    } else {
-      this.setState(
-        {
-          isInHouse: false,
-          value: [],
-        },
-        () => {
-          this.props.onChange(this.state.value);
-        },
-      );
-    }
-  }
-
   filterOnGroup(filter) {
 
     let groupsFilteringData = {...this.state.groupsFilteringData}
@@ -488,33 +460,6 @@ class Picky extends React.PureComponent {
       );
     }
 
-  }
-
-  filterOnCompetitors() {
-    if (!this.state.isCompetitors) {
-      this.setState(
-        {
-          value: this.props.options.filter(
-            item => item.group === 'Competitors',
-          ),
-          isCompetitors: true,
-          isInHouse: false,
-        },
-        () => {
-          this.props.onChange(this.state.value);
-        },
-      );
-    } else {
-      this.setState(
-        {
-          isCompetitors: false,
-          value: [],
-        },
-        () => {
-          this.props.onChange(this.state.value);
-        },
-      );
-    }
   }
 
   render() {
