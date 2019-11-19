@@ -45,6 +45,7 @@ class Picky extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.setGroupData(this.props)
     this.focusFilterInput(this.state.open);
   }
 
@@ -69,28 +70,32 @@ class Picky extends React.PureComponent {
       });
     }
     if(!nextProps.updateData){
-      let groupsFilteringData = {}
-      nextProps.options.forEach(i => {
-        if(!!i.group){
-          if(groupsFilteringData[i.group]){
-            groupsFilteringData[i.group].options = [...groupsFilteringData[i.group].options, i]
-          }else {
-            groupsFilteringData[i.group] = {
-              options: [],
-              selected: []
-            }
+      this.setGroupData(nextProps)
+    }
+  }
+
+  setGroupData(nextProps) {
+    let groupsFilteringData = {}
+    nextProps.options.forEach(i => {
+      if(!!i.group){
+        if(groupsFilteringData[i.group]){
+          groupsFilteringData[i.group].options = [...groupsFilteringData[i.group].options, i]
+        }else {
+          groupsFilteringData[i.group] = {
+            options: [],
+            selected: []
           }
         }
-      })
-      nextProps.groupsFiltering.forEach(i => {
-        groupsFilteringData[i].selected = nextProps.value.filter(v => v.group === i)
-      })
-      console.log(nextProps.groupsFiltering)
-      console.log(groupsFilteringData)
-      this.setState({
-        groupsFilteringData: groupsFilteringData
-      })
-    }
+      }
+    })
+    nextProps.groupsFiltering.forEach(i => {
+      groupsFilteringData[i].selected = nextProps.value.filter(v => v.group === i)
+    })
+    console.log(nextProps.groupsFiltering)
+    console.log(groupsFilteringData)
+    this.setState({
+      groupsFilteringData: groupsFilteringData
+    })
   }
 
   selectValue(val, e) {
