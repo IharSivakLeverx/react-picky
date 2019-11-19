@@ -492,6 +492,12 @@ class Picky extends React.PureComponent {
     }
     const buttonId = `${this.props.id}__button`;
     const dropdownStyle = { maxHeight: dropdownHeight, overflowY: 'scroll' };
+
+    console.log('          ')
+    console.log(!!this.state.groupsFilteringData)
+    console.log(!!this.props.groupsFiltering)
+    console.log(this.state.groupsFilteringData)
+    console.log(this.props.groupsFiltering)
     return (
       <div
         ref={node => {
