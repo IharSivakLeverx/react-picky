@@ -610,10 +610,7 @@ class Picky extends React.PureComponent {
                 toggleSelectAll={this.toggleSelectAll}
               />
 
-              {!!this.props.groupsFiltering &&
-              !!this.props.groupsFiltering.length &&
-                this.state.groupsFilteringData &&
-              this.props.groupsFiltering.map((item, key) => {
+              {!!this.props.groupsFiltering.map((item, key) => {
                 return (
                   <FilterSelect
                     key={key}
@@ -621,34 +618,10 @@ class Picky extends React.PureComponent {
                     tabIndex={key}
                     allSelected={this.state.groupsFilteringData[item].options.length === this.state.groupsFilteringData[item].selected.length}
                     selectAllText={item}
-                    toggleSelectAll={this.filterOnGroup(item)}
+                    toggleSelectAll={()=>{this.filterOnGroup(item)}}
                   />
                 )
               })}
-              {/*{this.props.inHouse && (*/}
-              {/*  <FilterSelect*/}
-              {/*    // visible={this.showSelectAll}*/}
-              {/*    visible={true}*/}
-              {/*    tabIndex={tabIndex}*/}
-              {/*    // disabled={disabled}*/}
-              {/*    allSelected={this.state.isInHouse}*/}
-              {/*    id={this.props.id}*/}
-              {/*    selectAllText={'In-house'}*/}
-              {/*    toggleSelectAll={this.filterOnInHouse}*/}
-              {/*  />*/}
-              {/*)}*/}
-              {/*{this.props.isCompetitors && (*/}
-              {/*  <FilterSelect*/}
-              {/*    // visible={this.showSelectAll}*/}
-              {/*    visible={true}*/}
-              {/*    tabIndex={tabIndex}*/}
-              {/*    // disabled={disabled}*/}
-              {/*    allSelected={this.state.isCompetitors}*/}
-              {/*    id={this.props.id}*/}
-              {/*    selectAllText={'Competitors'}*/}
-              {/*    toggleSelectAll={this.filterOnCompetitors}*/}
-              {/*  />*/}
-              {/*)}*/}
             </div>
           )}
           {open && <div data-testid='dropdown'>{this.renderOptions()}</div>}
