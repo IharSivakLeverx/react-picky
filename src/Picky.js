@@ -106,17 +106,21 @@ class Picky extends React.PureComponent {
         this.props.valueKey,
         this.props.labelKey,
       );
-      let groupsFilteringData = {...this.state.groupsFilteringData}
+      let {groupsFilteringData} = this.state
       let selectedValue = [];
       console.log(groupsFilteringData)
       if (itemIndex > -1) {
-        if(!!val.group) groupsFilteringData[val.group].selected = groupsFilteringData.selected.filter(i => String(i.key) !== String(val.key))
+        console.log(1)
+        console.log(val)
+        if(!!val.group) groupsFilteringData[val.group].selected = groupsFilteringData[val.group].selected.filter(i => String(i.key) !== String(val.key))
+        console.log(groupsFilteringData)
         selectedValue = [
           ...valueLookup.slice(0, itemIndex),
           ...valueLookup.slice(itemIndex + 1),
         ];
       } else {
-        if(!!val.group) groupsFilteringData[val.group].selected = [...groupsFilteringData.selected,val]
+        console.log(2)
+        if(!!val.group) groupsFilteringData[val.group].selected = [...groupsFilteringData[val.group].selected, val]
         selectedValue = [...this.props.value, val];
       }
 
@@ -124,11 +128,8 @@ class Picky extends React.PureComponent {
         {
           allSelected: selectedValue.length === this.props.options.length,
           groupsFilteringData: groupsFilteringData
-        },
-        () => {
-          this.props.onChange(selectedValue, val);
-        },
-      );
+        });
+      this.props.onChange(selectedValue, val);
     } else {
       this.props.onChange(val);
     }
