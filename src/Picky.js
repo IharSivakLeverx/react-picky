@@ -108,6 +108,7 @@ class Picky extends React.PureComponent {
       );
       let groupsFilteringData = {...this.state.groupsFilteringData}
       let selectedValue = [];
+      console.log(groupsFilteringData)
       if (itemIndex > -1) {
         if(!!val.group) groupsFilteringData[val.group].selected = groupsFilteringData.selected.filter(i => String(i.key) !== String(val.key))
         selectedValue = [
@@ -455,13 +456,9 @@ class Picky extends React.PureComponent {
       })
       this.setState(
         {
-          value: this.state.value.filter(i => i.group !== filter),
           groupsFilteringData: groupsFilteringData
-        },
-        () => {
-          this.props.onChange(this.state.value);
-        },
-      );
+        });
+      this.props.onChange(this.props.value.filter(i => i.group !== filter));
     }
 
   }
