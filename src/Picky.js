@@ -567,8 +567,8 @@ class Picky extends React.PureComponent {
                 toggleSelectAll={this.toggleSelectAll}
               />
 
-              {!!this.state.groupsFilteringData && !!this.props.groupsFiltering && !!this.props.groupsFiltering.map((item, key) => {
-                console.log()
+              {!!this.state.groupsFilteringData && !!this.props.groupsFiltering && this.props.groupsFiltering.map((item, key) => {
+                console.log('item')
                 return (
                   <div>
                     {item}
