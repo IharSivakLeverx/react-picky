@@ -69,6 +69,7 @@ class Picky extends React.PureComponent {
       });
     }
     if(nextProps.updateData){
+      debugger
       console.log(nextProps)
       let groupsFilteringData = {}
       nextProps.options.forEach(i => {
@@ -555,7 +556,7 @@ class Picky extends React.PureComponent {
                 toggleSelectAll={this.toggleSelectAll}
               />
 
-              {!!this.props.groupsFiltering.map((item, key) => {
+              {!!this.state.groupsFilteringData && !!this.props.groupsFiltering && !!this.props.groupsFiltering.map((item, key) => {
                 return (
                   <FilterSelect
                     key={key}
