@@ -45,7 +45,7 @@ class Picky extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.setGroupData(this.props)
+    if(this.props.multiple) this.setGroupData(this.props)
     this.focusFilterInput(this.state.open);
   }
 
@@ -69,7 +69,7 @@ class Picky extends React.PureComponent {
           : this.allSelected(),
       });
     }
-    if(!nextProps.updateData){
+    if(!nextProps.updateData && this.props.multiple){
       this.setGroupData(nextProps)
     }
   }
