@@ -562,15 +562,15 @@ class Picky extends React.PureComponent {
               />
 
               {!!this.state.groupsFilteringData && !!this.props.groupsFiltering && !!this.props.groupsFiltering.map((item, key) => {
+                console.log()
                 return (
-                  <FilterSelect
-                    key={key}
-                    visible={true}
-                    tabIndex={key}
-                    allSelected={this.state.groupsFilteringData[item].options.length === this.state.groupsFilteringData[item].selected.length}
-                    selectAllText={item}
-                    toggleSelectAll={()=>{this.filterOnGroup(item)}}
-                  />
+                  <div>
+                    {item}
+                    <div>
+                      {this.state.groupsFilteringData[item].selected.map(v => <div>{v.value}</div>)}
+                    </div>
+                  </div>
+
                 )
               })}
             </div>
