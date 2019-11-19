@@ -27,7 +27,8 @@ class Picky extends React.PureComponent {
       allSelected: false,
       isCompetitors: false,
       isInHouse: false,
-    };
+      groupsFilteringData: null
+    }
     this.toggleDropDown = this.toggleDropDown.bind(this);
     this.toggleSelectAll = this.toggleSelectAll.bind(this);
     this.onFilterChange = this.onFilterChange.bind(this);
@@ -39,6 +40,7 @@ class Picky extends React.PureComponent {
     this.getValue = this.getValue.bind(this);
     this.filterOnInHouse = this.filterOnInHouse.bind(this);
     this.filterOnCompetitors = this.filterOnCompetitors.bind(this);
+    this.filterOnGroup = this.filterOnGroup.bind(this);
   }
   UNSAFE_componentWillMount() {
     this.setState({
@@ -64,12 +66,32 @@ class Picky extends React.PureComponent {
         : nextProps.value === this.props.value;
 
       let optsEqual = arraysEqual(nextProps.options, this.props.options);
-
       this.setState({
         allSelected: !(valuesEqual && optsEqual)
           ? this.allSelected(nextProps.value, nextProps.options)
           : this.allSelected(),
       });
+    }
+    if(nextProps.updateData){
+      let groupsFilteringData = {}
+      nextProps.options.forEach(i => {
+        if(!!i.group){
+          if(groupsFilteringData[i.group]){
+            groupsFilteringData[i.group].options = [...groupsFilteringData[i.group].options, i]
+          }else {
+            groupsFilteringData[i.group] = {
+              options: [],
+              selected: []
+            }
+          }
+        }
+      })
+      nextProps.groupsFiltering.forEach(i => {
+        groupsFilteringData[i].selected = nextProps.value.filter(v => v.group === i)
+      })
+      this.setState({
+        groupsFilteringData: groupsFilteringData
+      })
     }
   }
 
@@ -83,19 +105,23 @@ class Picky extends React.PureComponent {
         this.props.valueKey,
         this.props.labelKey,
       );
-
+      let groupsFilteringData = {...groupsFilteringData}
       let selectedValue = [];
       if (itemIndex > -1) {
+        if(!!val.group) groupsFilteringData[val.group].selected = groupsFilteringData.selected.filter(i => String(i.key) !== String(val.key))
         selectedValue = [
           ...valueLookup.slice(0, itemIndex),
           ...valueLookup.slice(itemIndex + 1),
         ];
       } else {
+        if(!!val.group) groupsFilteringData[val.group].selected = [...groupsFilteringData.selected,val]
         selectedValue = [...this.props.value, val];
       }
+
       this.setState(
         {
-          allSelected: this.allSelected(selectedValue),
+          allSelected: selectedValue.length === this.props.options.length,
+          groupsFilteringData: groupsFilteringData
         },
         () => {
           this.props.onChange(selectedValue, val);
@@ -149,23 +175,42 @@ class Picky extends React.PureComponent {
    */
   toggleSelectAll(e) {
     if (this.props.disabled || e.target.type === 'checkbox') return;
-    this.setState(
-      state => {
-        return {
-          ...state,
-          allSelected: !this.state.allSelected,
-          isInHouse: false,
-          isCompetitors: false,
-        };
-      },
-      () => {
-        if (!this.state.allSelected) {
-          this.props.onChange([]);
-        } else {
-          this.props.onChange(this.props.options);
-        }
-      },
-    );
+
+    if (this.state.allSelected) {
+      let groupsFilteringData = this.state.groupsFilteringData
+        this.props.groupsFiltering.forEach(i => {
+          groupsFilteringData[i].selected = [];
+        });
+      this.setState({
+        allSelected: false,
+      });
+      this.props.onChange([])
+    } else {
+      let groupsFilteringData = this.state.groupsFilteringData
+      this.props.groupsFiltering.forEach(i => {
+        groupsFilteringData[i].selected = groupsFilteringData[i].options
+      });
+      this.setState({
+        allSelected: true,
+      });
+      this.props.onChange(this.props.options)
+
+    }
+    // this.setState(
+    //   state => {
+    //     return {
+    //       ...state,
+    //       allSelected: !this.state.allSelected,
+    //     };
+    //   },
+    //   () => {
+    //     if (!this.state.allSelected) {
+    //       this.props.onChange([]);
+    //     } else {
+    //       this.props.onChange(this.props.options);
+    //     }
+    //   },
+    // );
   }
 
   isItemSelected(item) {
@@ -413,6 +458,38 @@ class Picky extends React.PureComponent {
     }
   }
 
+  filterOnGroup(filter) {
+
+    let groupsFilteringData = {...this.state.groupsFilteringData}
+
+    if (groupsFilteringData[filter].selected.length !== groupsFilteringData[filter].options.length) {
+      this.props.groupsFiltering.forEach(i => {
+        if(filter === i) groupsFilteringData[i].selected = groupsFilteringData[i].options
+        else groupsFilteringData[i].selected = []
+      })
+      this.setState(
+        {
+          value: groupsFilteringData[filter].options,
+          groupsFilteringData: groupsFilteringData
+        })
+          this.props.onChange(groupsFilteringData[filter].options);
+    } else {
+      this.props.groupsFiltering.forEach(i => {
+        if(filter === i) groupsFilteringData[i].selected = []
+      })
+      this.setState(
+        {
+          value: this.state.value.filter(i => i.group !== filter),
+          groupsFilteringData: groupsFilteringData
+        },
+        () => {
+          this.props.onChange(this.state.value);
+        },
+      );
+    }
+
+  }
+
   filterOnCompetitors() {
     if (!this.state.isCompetitors) {
       this.setState(
@@ -532,30 +609,46 @@ class Picky extends React.PureComponent {
                 selectAllText={this.props.selectAllText}
                 toggleSelectAll={this.toggleSelectAll}
               />
-              {this.props.inHouse && (
-                <FilterSelect
-                  // visible={this.showSelectAll}
-                  visible={true}
-                  tabIndex={tabIndex}
-                  // disabled={disabled}
-                  allSelected={this.state.isInHouse}
-                  id={this.props.id}
-                  selectAllText={'In-house'}
-                  toggleSelectAll={this.filterOnInHouse}
-                />
-              )}
-              {this.props.isCompetitors && (
-                <FilterSelect
-                  // visible={this.showSelectAll}
-                  visible={true}
-                  tabIndex={tabIndex}
-                  // disabled={disabled}
-                  allSelected={this.state.isCompetitors}
-                  id={this.props.id}
-                  selectAllText={'Competitors'}
-                  toggleSelectAll={this.filterOnCompetitors}
-                />
-              )}
+
+              {!!this.state.groupsFiltering &&
+              !!this.props.groupsFiltering.length &&
+                this.state.groupsFilteringData &&
+              this.props.groupsFiltering.map((item, key) => {
+                return (
+                  <FilterSelect
+                    key={key}
+                    visible={true}
+                    tabIndex={key}
+                    allSelected={this.state.groupsFilteringData[item].options.length === this.state.groupsFilteringData[item].selected.length}
+                    selectAllText={item}
+                    toggleSelectAll={this.filterOnGroup(item)}
+                  />
+                )
+              })}
+              {/*{this.props.inHouse && (*/}
+              {/*  <FilterSelect*/}
+              {/*    // visible={this.showSelectAll}*/}
+              {/*    visible={true}*/}
+              {/*    tabIndex={tabIndex}*/}
+              {/*    // disabled={disabled}*/}
+              {/*    allSelected={this.state.isInHouse}*/}
+              {/*    id={this.props.id}*/}
+              {/*    selectAllText={'In-house'}*/}
+              {/*    toggleSelectAll={this.filterOnInHouse}*/}
+              {/*  />*/}
+              {/*)}*/}
+              {/*{this.props.isCompetitors && (*/}
+              {/*  <FilterSelect*/}
+              {/*    // visible={this.showSelectAll}*/}
+              {/*    visible={true}*/}
+              {/*    tabIndex={tabIndex}*/}
+              {/*    // disabled={disabled}*/}
+              {/*    allSelected={this.state.isCompetitors}*/}
+              {/*    id={this.props.id}*/}
+              {/*    selectAllText={'Competitors'}*/}
+              {/*    toggleSelectAll={this.filterOnCompetitors}*/}
+              {/*  />*/}
+              {/*)}*/}
             </div>
           )}
           {open && <div data-testid='dropdown'>{this.renderOptions()}</div>}
@@ -598,6 +691,7 @@ Picky.propTypes = {
   onClose: PropTypes.func,
   valueKey: PropTypes.string,
   labelKey: PropTypes.string,
+  groupsFiltering: PropTypes.array,
   render: PropTypes.func,
   tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   keepOpen: PropTypes.bool,
@@ -613,6 +707,7 @@ Picky.propTypes = {
   getFilterValue: PropTypes.func,
   caseSensitiveFilter: PropTypes.bool,
   buttonProps: PropTypes.object,
+  updateData: PropTypes.bool,
 };
 
 export default Picky;
