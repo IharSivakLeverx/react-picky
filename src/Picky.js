@@ -68,9 +68,7 @@ class Picky extends React.PureComponent {
           : this.allSelected(),
       });
     }
-    if(nextProps.updateData){
-      debugger
-      console.log(nextProps)
+    if(!nextProps.updateData){
       let groupsFilteringData = {}
       nextProps.options.forEach(i => {
         if(!!i.group){
@@ -87,6 +85,8 @@ class Picky extends React.PureComponent {
       nextProps.groupsFiltering.forEach(i => {
         groupsFilteringData[i].selected = nextProps.value.filter(v => v.group === i)
       })
+      console.log(nextProps.groupsFiltering)
+      console.log(groupsFilteringData)
       this.setState({
         groupsFilteringData: groupsFilteringData
       })
