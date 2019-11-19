@@ -492,12 +492,6 @@ class Picky extends React.PureComponent {
     }
     const buttonId = `${this.props.id}__button`;
     const dropdownStyle = { maxHeight: dropdownHeight, overflowY: 'scroll' };
-
-    console.log('          ')
-    console.log(!!this.state.groupsFilteringData)
-    console.log(!!this.props.groupsFiltering)
-    console.log(this.state.groupsFilteringData)
-    console.log(this.props.groupsFiltering)
     return (
       <div
         ref={node => {
@@ -568,15 +562,15 @@ class Picky extends React.PureComponent {
               />
 
               {!!this.state.groupsFilteringData && !!this.props.groupsFiltering && this.props.groupsFiltering.map((item, key) => {
-                console.log('item')
                 return (
-                  <div>
-                    {item}
-                    <div>
-                      {this.state.groupsFilteringData[item].selected.map(v => <div>{v.value}</div>)}
-                    </div>
-                  </div>
-
+                  <FilterSelect
+                    key={key}
+                    visible={true}
+                    tabIndex={key}
+                    allSelected={this.state.groupsFilteringData[item].options.length === this.state.groupsFilteringData[item].selected.length}
+                    selectAllText={item}
+                    toggleSelectAll={()=>{this.filterOnGroup(item)}}
+                  />
                 )
               })}
             </div>
