@@ -392,8 +392,9 @@ class Picky extends React.PureComponent {
    *
    * @memberof Picky
    */
-  toggleDropDown() {
+  toggleDropDown(e) {
     if (!this.state.open) {
+      this.props.setPosition(e)
       // Add event listener to listen for clicks to determine if click occured outside the component or not
       document.addEventListener('click', this.handleOutsideClick, false);
     } else {
@@ -628,6 +629,7 @@ Picky.propTypes = {
   caseSensitiveFilter: PropTypes.bool,
   buttonProps: PropTypes.object,
   updateData: PropTypes.bool,
+  setPosition: PropTypes.func
 };
 
 export default Picky;
