@@ -548,7 +548,7 @@ class Picky extends React.PureComponent {
           ) : (
             <div className={this.props.multiple && 'picky__wrapperFilters'}>
               <FilterSelect
-                visible={true}
+                visible={this.props.multiple}
                 tabIndex={tabIndex}
                 // disabled={disabled}
                 allSelected={this.state.allSelected}
