@@ -441,16 +441,21 @@ class Picky extends React.PureComponent {
 
     let groupsFilteringData = {...this.state.groupsFilteringData}
     if (groupsFilteringData[filter].selected.length !== groupsFilteringData[filter].options.length) {
+      let arr = []
       this.props.groupsFiltering.forEach(i => {
-        if(filter === i) groupsFilteringData[i].selected = groupsFilteringData[i].options
+        if(filter === i) {
+          groupsFilteringData[i].selected = groupsFilteringData[i].options
+          arr.concat(groupsFilteringData[i].options)
+        }
+        else arr.concat(groupsFilteringData[i].selected)
         // else groupsFilteringData[i].selected = []
       })
       this.setState(
         {
-          value: groupsFilteringData[filter].options,
+          value: arr,
           groupsFilteringData: groupsFilteringData
         })
-          this.props.onChange(groupsFilteringData[filter].options);
+          this.props.onChange(arr);
     } else {
       this.props.groupsFiltering.forEach(i => {
         if(filter === i) groupsFilteringData[i].selected = []
