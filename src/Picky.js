@@ -539,7 +539,6 @@ class Picky extends React.PureComponent {
           )}
           {renderSelectAll ? (
             renderSelectAll({
-              filtered: this.state.filtered,
               allSelected: this.state.allSelected,
               toggleSelectAll: this.toggleSelectAll,
               tabIndex,
