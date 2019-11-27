@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dc7e58ff-22e8-472a-b57d-c76c688ab44a" name="Default Changelist" comment="" />
+    <list default="true" id="dc7e58ff-22e8-472a-b57d-c76c688ab44a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Picky.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Picky.js" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +67,11 @@
       <workItem from="1574433803625" duration="873000" />
       <workItem from="1574442560911" duration="2000" />
       <workItem from="1574668496198" duration="2777000" />
-      <workItem from="1574680768595" duration="2033000" />
+      <workItem from="1574680768595" duration="2967000" />
+      <workItem from="1574686197488" duration="606000" />
+      <workItem from="1574708262958" duration="57000" />
+      <workItem from="1574776330726" duration="680000" />
+      <workItem from="1574874728616" duration="816000" />
     </task>
     <servers />
   </component>

@@ -442,8 +442,6 @@ class Picky extends React.PureComponent {
     let groupsFilteringData = {...this.state.groupsFilteringData}
     if (groupsFilteringData[filter].selected.length !== groupsFilteringData[filter].options.length) {
       let arr = []
-      console.log(this.props.groupsFiltering)
-      console.log(groupsFilteringData)
       this.props.groupsFiltering.forEach(i => {
         if(filter === i) {
           groupsFilteringData[i].selected = groupsFilteringData[i].options
@@ -452,7 +450,6 @@ class Picky extends React.PureComponent {
         else arr = [...arr, ...groupsFilteringData[i].selected]
         // else groupsFilteringData[i].selected = []
       })
-      console.log(arr)
       this.setState(
         {
           value: arr,
@@ -506,7 +503,7 @@ class Picky extends React.PureComponent {
         role='combobox'
         aria-controls={buttonId}
         aria-expanded={open}
-        aria-haspopup={open}
+        // aria-haspopup={open}
         aria-owns={ariaOwns}
         data-typeview={this.props.typeView}
         tabIndex={tabIndex}
@@ -533,9 +530,9 @@ class Picky extends React.PureComponent {
         <div
           className='picky__dropdown'
           id={this.props.id + '-list'}
-          aria-hidden={!open}
-          hidden={!open}
-          style={open ? dropdownStyle : { visibility: 'hidden' }}
+          // aria-hidden={!open}
+          // hidden={!open}
+          style={dropdownStyle}
         >
           {includeFilter && (
             <Filter
@@ -578,7 +575,7 @@ class Picky extends React.PureComponent {
               })}
             </div>
           )}
-          {open && <div data-testid='dropdown'>{this.renderOptions()}</div>}
+          <div data-testid='dropdown'>{this.renderOptions()}</div>
         </div>
       </div>
     );
