@@ -503,7 +503,7 @@ class Picky extends React.PureComponent {
         role='combobox'
         aria-controls={buttonId}
         aria-expanded={open}
-        // aria-haspopup={open}
+        aria-haspopup={open}
         aria-owns={ariaOwns}
         data-typeview={this.props.typeView}
         tabIndex={tabIndex}
@@ -530,9 +530,9 @@ class Picky extends React.PureComponent {
         <div
           className='picky__dropdown'
           id={this.props.id + '-list'}
-          // aria-hidden={!open}
-          // hidden={!open}
-          style={dropdownStyle}
+          aria-hidden={!open}
+          hidden={!open}
+          style={open ? dropdownStyle : { visibility: 'hidden' }}
         >
           {includeFilter && (
             <Filter
@@ -575,7 +575,7 @@ class Picky extends React.PureComponent {
               })}
             </div>
           )}
-          <div data-testid='dropdown'>{this.renderOptions()}</div>
+          {open && <div data-testid='dropdown'>{this.renderOptions()}</div>}
         </div>
       </div>
     );
