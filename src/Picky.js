@@ -45,13 +45,13 @@ class Picky extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.refs.dropDown.addEventListener('wheel', this.props.scrollEvent)
+    // this.refs.dropDown.addEventListener('wheel', this.props.scrollEvent)
     if(this.props.multiple) this.setGroupData(this.props)
     this.focusFilterInput(this.state.open);
   }
 
   componentWillUnmount() {
-    this.refs.dropDown.addEventListener('wheel', this.props.scrollEvent)
+    // this.refs.dropDown.addEventListener('wheel', this.props.scrollEvent)
     document.removeEventListener('click', this.handleOutsideClick, false);
   }
 
@@ -636,7 +636,6 @@ Picky.propTypes = {
   buttonProps: PropTypes.object,
   updateData: PropTypes.bool,
   setPosition: PropTypes.func,
-  scrollEvent: PropTypes.func
 };
 
 export default Picky;
