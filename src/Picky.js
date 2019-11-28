@@ -37,11 +37,18 @@ class Picky extends React.PureComponent {
     this.focusFilterInput = this.focusFilterInput.bind(this);
     this.getValue = this.getValue.bind(this);
     this.filterOnGroup = this.filterOnGroup.bind(this);
+    this.scrollEvent = this.scrollEvent.bind(this);
   }
   UNSAFE_componentWillMount() {
     this.setState({
       allSelected: this.allSelected(),
     });
+    this.refs.dropDowm.addEventListener('scroll', this.scrollEvent)
+  }
+
+  scrollEvent(e) {
+    console.log(e)
+
   }
 
   componentDidMount() {
@@ -50,6 +57,7 @@ class Picky extends React.PureComponent {
   }
 
   componentWillUnmount() {
+    this.refs.dropDowm.addEventListener('scroll', this.scrollEvent)
     document.removeEventListener('click', this.handleOutsideClick, false);
   }
 
@@ -532,6 +540,7 @@ class Picky extends React.PureComponent {
           id={this.props.id + '-list'}
           aria-hidden={!open}
           hidden={!open}
+          ref='dropDown'
           style={open ? dropdownStyle : { visibility: 'hidden' }}
         >
           {includeFilter && (
