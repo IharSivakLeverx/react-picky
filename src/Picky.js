@@ -37,7 +37,6 @@ class Picky extends React.PureComponent {
     this.focusFilterInput = this.focusFilterInput.bind(this);
     this.getValue = this.getValue.bind(this);
     this.filterOnGroup = this.filterOnGroup.bind(this);
-    this.scrollEvent = this.scrollEvent.bind(this);
   }
   UNSAFE_componentWillMount() {
     this.setState({
@@ -45,19 +44,14 @@ class Picky extends React.PureComponent {
     });
   }
 
-  scrollEvent(e) {
-    console.log(e)
-
-  }
-
   componentDidMount() {
-    this.refs.dropDown.addEventListener('scroll', this.scrollEvent)
+    this.refs.dropDown.addEventListener('wheel', this.props.scrollEvent)
     if(this.props.multiple) this.setGroupData(this.props)
     this.focusFilterInput(this.state.open);
   }
 
   componentWillUnmount() {
-    this.refs.dropDown.addEventListener('scroll', this.scrollEvent)
+    this.refs.dropDown.addEventListener('wheel', this.props.scrollEvent)
     document.removeEventListener('click', this.handleOutsideClick, false);
   }
 
@@ -641,7 +635,8 @@ Picky.propTypes = {
   caseSensitiveFilter: PropTypes.bool,
   buttonProps: PropTypes.object,
   updateData: PropTypes.bool,
-  setPosition: PropTypes.func
+  setPosition: PropTypes.func,
+  scrollEvent: PropTypes.func
 };
 
 export default Picky;
