@@ -51,13 +51,13 @@ class Picky extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.refs.dropDowm.addEventListener('scroll', this.scrollEvent)
+    this.refs.dropDown.addEventListener('scroll', this.scrollEvent)
     if(this.props.multiple) this.setGroupData(this.props)
     this.focusFilterInput(this.state.open);
   }
 
   componentWillUnmount() {
-    this.refs.dropDowm.addEventListener('scroll', this.scrollEvent)
+    this.refs.dropDown.addEventListener('scroll', this.scrollEvent)
     document.removeEventListener('click', this.handleOutsideClick, false);
   }
 
